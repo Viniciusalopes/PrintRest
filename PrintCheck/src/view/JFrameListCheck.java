@@ -7,8 +7,9 @@ package view;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import org.json.simple.JSONObject;
 import service.CheckService;
+import service.PrintService;
+import static util.Util.*;
 
 /**
  *
@@ -33,42 +34,72 @@ public class JFrameListCheck extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
+        jButtonRefresh = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton2 = new javax.swing.JButton();
+        jTableChecks = new javax.swing.JTable();
+        jButtonPrint = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
-        jButton1.setText("Consultar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonRefresh.setText("Consultar");
+        jButtonRefresh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonRefreshActionPerformed(evt);
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTableChecks.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID", "N° Matricula", "N° RG", "N° Cheque", "Valor", "Valor por Extenso", "Nome do Associado", "Data", "Limite por Folha", "Validade"
+                "ID", "N° Matricula", "N° RG", "N° Cheque", "Valor", "Valor por Extenso", "Nome do Associado", "Data", "Limite por Folha", "Validade", "Impressões"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTableChecks);
+        if (jTableChecks.getColumnModel().getColumnCount() > 0) {
+            jTableChecks.getColumnModel().getColumn(0).setMinWidth(50);
+            jTableChecks.getColumnModel().getColumn(0).setPreferredWidth(50);
+            jTableChecks.getColumnModel().getColumn(0).setMaxWidth(50);
+            jTableChecks.getColumnModel().getColumn(1).setMinWidth(80);
+            jTableChecks.getColumnModel().getColumn(1).setPreferredWidth(80);
+            jTableChecks.getColumnModel().getColumn(1).setMaxWidth(80);
+            jTableChecks.getColumnModel().getColumn(2).setMinWidth(80);
+            jTableChecks.getColumnModel().getColumn(2).setPreferredWidth(80);
+            jTableChecks.getColumnModel().getColumn(2).setMaxWidth(80);
+            jTableChecks.getColumnModel().getColumn(3).setMinWidth(80);
+            jTableChecks.getColumnModel().getColumn(3).setPreferredWidth(80);
+            jTableChecks.getColumnModel().getColumn(3).setMaxWidth(80);
+            jTableChecks.getColumnModel().getColumn(4).setMinWidth(100);
+            jTableChecks.getColumnModel().getColumn(4).setPreferredWidth(100);
+            jTableChecks.getColumnModel().getColumn(4).setMaxWidth(100);
+            jTableChecks.getColumnModel().getColumn(7).setMinWidth(80);
+            jTableChecks.getColumnModel().getColumn(7).setPreferredWidth(80);
+            jTableChecks.getColumnModel().getColumn(7).setMaxWidth(80);
+            jTableChecks.getColumnModel().getColumn(8).setMinWidth(100);
+            jTableChecks.getColumnModel().getColumn(8).setPreferredWidth(100);
+            jTableChecks.getColumnModel().getColumn(8).setMaxWidth(100);
+            jTableChecks.getColumnModel().getColumn(9).setMinWidth(80);
+            jTableChecks.getColumnModel().getColumn(9).setPreferredWidth(80);
+            jTableChecks.getColumnModel().getColumn(9).setMaxWidth(80);
+            jTableChecks.getColumnModel().getColumn(10).setMinWidth(80);
+            jTableChecks.getColumnModel().getColumn(10).setPreferredWidth(80);
+            jTableChecks.getColumnModel().getColumn(10).setMaxWidth(80);
+        }
 
-        jButton2.setText("Imprimir");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jButtonPrint.setText("Imprimir");
+        jButtonPrint.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jButtonPrintActionPerformed(evt);
             }
         });
 
@@ -77,67 +108,69 @@ public class JFrameListCheck extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton2)
-                    .addComponent(jButton1)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 836, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1124, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButtonPrint, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButtonRefresh, javax.swing.GroupLayout.Alignment.TRAILING))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButtonRefresh)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
-                .addGap(20, 20, 20))
+                .addComponent(jButtonPrint)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try{
-            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-            JSONObject json = CheckService.getCheck();
+    private void jButtonRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRefreshActionPerformed
+        try {
+            DefaultTableModel model = (DefaultTableModel) jTableChecks.getModel();
             model.setRowCount(0);
-            model.addRow(new Object[] {
-                json.get("id"),
-                json.get("bank"),
-                json.get("account"),
-                json.get("value")
-            });
+            for (Object check : (new CheckService()).getChecks()) {
+                model.addRow((Object[]) check);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(rootPane, getErrorMessage(e), "Opa", JOptionPane.ERROR_MESSAGE);
         }
-        catch(Exception e) {
-            JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Opa", JOptionPane.ERROR_MESSAGE);
-       
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButtonRefreshActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        if (jTable1.getSelectedRowCount() == 0) {
-            JOptionPane.showMessageDialog(
-                    rootPane, 
-                    "Selecione um cheque para imprimir!", 
-                    "Opa!", 
-                    JOptionPane.WARNING_MESSAGE
-            );
-            return;
+    private void jButtonPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPrintActionPerformed
+        try {
+            if (jTableChecks.getSelectedRowCount() == 0) {
+                JOptionPane.showMessageDialog(
+                        rootPane,
+                        "Selecione um cheque para imprimir!",
+                        "Opa!",
+                        JOptionPane.WARNING_MESSAGE
+                );
+                return;
+            }
+
+            for (int selectedRow : jTableChecks.getSelectedRows()) {
+                int id = Integer.parseInt(jTableChecks.getValueAt(selectedRow, 0).toString());
+                JOptionPane.showMessageDialog(
+                        rootPane,
+                        (new PrintService()).print("cheque", id),
+                        "Impressão",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+            }
+            jButtonRefreshActionPerformed(evt);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(rootPane, getErrorMessage(e), "Opa", JOptionPane.ERROR_MESSAGE);
         }
-        
-        for (int selectedRow : jTable1.getSelectedRows()) {
-            JOptionPane.showMessageDialog(
-                    rootPane, 
-                    String.format("Imprimindo cheque: %d", jTable1.getValueAt(selectedRow, 0)), 
-                    "Impressão", 
-                    JOptionPane.INFORMATION_MESSAGE
-            );
-        }
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jButtonPrintActionPerformed
 
     /**
      * @param args the command line arguments
@@ -176,9 +209,9 @@ public class JFrameListCheck extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButtonPrint;
+    private javax.swing.JButton jButtonRefresh;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTableChecks;
     // End of variables declaration//GEN-END:variables
 }

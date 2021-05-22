@@ -5,9 +5,6 @@
  */
 package service;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -18,29 +15,57 @@ import org.json.simple.parser.JSONParser;
  */
 public class CheckService {
 
-    private static int HTTP_COD_SUCESSO = 200;
+    private DefaultService ds;
+    private JSONParser parser = new JSONParser();
 
-    public static JSONObject getCheck() throws Exception {
-        URL url = new URL("http://localhost:8080");//your url i.e fetch data from .
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-        conn.setRequestProperty("Accept", "application/json");
-        if (conn.getResponseCode() != 200) {
-            throw new RuntimeException("Failed : HTTP Error code : "
-                    + conn.getResponseCode());
-        }
-        InputStreamReader in = new InputStreamReader(conn.getInputStream());
-        BufferedReader br = new BufferedReader(in);
-        String output;
-        String strJson = "";
-        while ((output = br.readLine()) != null) {
-            strJson += output;
-        }
-        conn.disconnect();
+    public CheckService() throws Exception {
+        ds = new DefaultService(new URL("http://localhost:8080"));
+    }
 
-        JSONParser parser = new JSONParser();
-        JSONObject json = (JSONObject) parser.parse(strJson);
-        System.out.println(json.toJSONString());
-        return json;
+    public Object[] getChecks() throws Exception {
+        String get = ds.get();
+        String[] checks = get.replace("[", "").replace("]", "").replace("},", "}-->").split("-->");
+        Object[] ret = new Object[checks.length];
+
+        for (int i = 0; i < checks.length; i++) {
+            JSONObject joc = new JSONObject();
+            joc = (JSONObject) parser.parse(checks[i]);
+
+            ret[i] = new Object[]{
+                joc.get("id"),
+                joc.get("registration"),
+                joc.get("rg"),
+                joc.get("number"),
+                joc.get("value"),
+                joc.get("written_value"),
+                joc.get("associate_name"),
+                joc.get("date"),
+                joc.get("limit_per_sheet"),
+                joc.get("validity"),
+                getPrints(Integer.parseInt(joc.get("id").toString()))
+            };
+        }
+        return ret;
+    }
+
+    private JSONObject getJsonPrints(int id) throws Exception {
+        JSONObject ret = new JSONObject();
+        try {
+            ret = (JSONObject) parser.parse(FileService.load("checkPrint", id + "", "json"));
+        } catch (Exception e) {
+            ret.put("prints", 0);
+        }
+        return ret;
+    }
+
+    private int getPrints(int id) throws Exception {
+        JSONObject jop = getJsonPrints(id);
+        return Integer.parseInt(jop.get("prints").toString());
+    }
+
+    public void addPrint(int id) throws Exception {
+        JSONObject ret = new JSONObject();
+        ret.put("prints", (getPrints(id) + 1));
+        FileService.record("checkPrint", id + "", "json", ret.toJSONString());
     }
 }
